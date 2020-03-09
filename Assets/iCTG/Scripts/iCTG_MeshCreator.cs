@@ -5,14 +5,18 @@ using UnityEngine;
 
 public class iCTG_MeshCreator : MonoBehaviour
 {
+    [Header("| Data")]
     public Vector3[] listVector;
     public Vector3[] listTriangle;
     public Material material;
+    [Header("| Config")]
     public float duration;
     public float startY;
     public float endY;
     public float velocity;
+    [Header("| Runners")]
     public bool onStart;
+    public bool onUpdate;
 
     private Vector3[] m_listTriangle;
     private MeshFilter meshFilter;
@@ -28,21 +32,24 @@ public class iCTG_MeshCreator : MonoBehaviour
 
     private void Update()
     {
-        Render(0f);
-        float amount = Time.time * velocity * .001f;
-        for (int i = 0; i < listVector.Length; i++)
+        if (onUpdate)
         {
-            if (i % 2 == 0)
+            Render(0f);
+            float amount = Time.time * velocity * .001f;
+            for (int i = 0; i < listVector.Length; i++)
             {
-                if (listVector[i].y <= startY)
-                    direction = true;
-                else if (listVector[i].y >= endY)
-                    direction = false;
+                if (i % 2 == 0)
+                {
+                    if (listVector[i].y <= startY)
+                        direction = true;
+                    else if (listVector[i].y >= endY)
+                        direction = false;
 
-                if (direction)
-                    listVector[i].y += amount;
-                else
-                    listVector[i].y -= amount;
+                    if (direction)
+                        listVector[i].y += amount;
+                    else
+                        listVector[i].y -= amount;
+                }
             }
         }
     }
@@ -83,6 +90,7 @@ public class iCTG_MeshCreator : MonoBehaviour
         }
         if (material)
             meshRenderer.material = material;
+            
     }
 
     private void AddTriangle(Vector3 triangle)
@@ -115,10 +123,5 @@ public class iCTG_MeshCreator : MonoBehaviour
         mesh.RecalculateNormals();
         mesh.RecalculateBounds();
         mesh.Optimize();
-    }
-
-    public int GetCantTriangles()
-    {
-        return listTriangle.Length;
     }
 }
