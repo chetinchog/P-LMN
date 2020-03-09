@@ -21,6 +21,7 @@ public class iCTG_MeshCreator : MonoBehaviour
     private Vector3[] m_listTriangle;
     private MeshFilter meshFilter;
     private MeshRenderer meshRenderer;
+    private MeshCollider meshCollider;
     private Mesh mesh;
     private bool direction;
 
@@ -49,8 +50,8 @@ public class iCTG_MeshCreator : MonoBehaviour
                         listVector[i].y += amount;
                     else
                         listVector[i].y -= amount;
-                }
             }
+        }
         }
     }
 
@@ -90,7 +91,12 @@ public class iCTG_MeshCreator : MonoBehaviour
         }
         if (material)
             meshRenderer.material = material;
-            
+        meshCollider = GetComponent<MeshCollider>();
+        if (meshCollider == null)
+        {
+            meshCollider = gameObject.AddComponent<MeshCollider>();
+        }
+
     }
 
     private void AddTriangle(Vector3 triangle)
@@ -114,6 +120,15 @@ public class iCTG_MeshCreator : MonoBehaviour
 
         mesh.vertices = vertices;
         mesh.triangles = triangles;
+        Vector2[] uvs = new Vector2[vertices.Length];
+
+        for (int i = 0; i < uvs.Length; i++)
+        {
+            uvs[i] = new Vector2(vertices[i].x, vertices[i].z);
+        }
+        mesh.uv = uvs;
+
+        meshCollider.sharedMesh = mesh;
 
         UpdateMesh();
     }
