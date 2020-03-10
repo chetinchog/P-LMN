@@ -33,6 +33,7 @@ public class iCTG_MeshCreator : MonoBehaviour
 
     private void Update()
     {
+        PrepareMesh();
         if (onUpdate)
         {
             Render(0f);
@@ -57,7 +58,11 @@ public class iCTG_MeshCreator : MonoBehaviour
 
     public void Render(float time = 0f)
     {
-        PrepareMesh();
+        Render(listTriangle, time);
+    }
+
+    public void Render(Vector3[] listTriangle, float time = 0f)
+    {
         foreach (Vector3 triangle in listTriangle)
         {
             StartCoroutine(WaitForCreate(triangle, UnityEngine.Random.Range(0f, time)));
